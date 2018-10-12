@@ -66,7 +66,6 @@ class ATM(object):
 		elif ch == 3:
 			with open(filename, 'r') as csvfile, tempfile:
 				reader = csv.DictReader(csvfile, fieldnames=fields)
-				# writer = csv.DictWriter(tempfile, fieldnames=fields)
 				for row in reader:
 					if row['pin'] == str(self.usr_pin):
 						print('Current balance is...')

@@ -1,4 +1,4 @@
-## ATM interface using CSV file containg corresponding PINs, Names, and Balances
+# ATM interface using CSV file containg corresponding PINs, Names, and Balances
 
 from tempfile import NamedTemporaryFile
 import shutil
@@ -66,11 +66,11 @@ class ATM(object):
 		elif ch == 3:
 			with open(filename, 'r') as csvfile, tempfile:
 				reader = csv.DictReader(csvfile, fieldnames=fields)
-				writer = csv.DictWriter(tempfile, fieldnames=fields)
+				# writer = csv.DictWriter(tempfile, fieldnames=fields)
 				for row in reader:
 					if row['pin'] == str(self.usr_pin):
 						print('Current balance is...')
-						print(row['bal'])
+						print("Rs. " + row['bal'] + " for the bank account of " + row['accHolderName'])
 						temp = int(row['bal'])
 						if temp < 0:
 							print("Balance below Rs. 0.00")
@@ -81,7 +81,7 @@ class ATM(object):
 			exit()
 
 		else:
-			print("Wrong input. Try again...")
+			print("Incorrect input. Try again...")
 			self.chooser(filename, tempfile, fields)
 
 class ATM_Interface(ATM):

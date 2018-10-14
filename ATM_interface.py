@@ -23,33 +23,24 @@ class ATM(object):
 			'3' => Account current status/Details
 			'4' => Exit
 			""")
+		ch=input()
 
-		ch = int(input())
-
-		if ch == 1:
-			print("Enter amount to be deposited...\n")
-			usr_bal = int(input())
-			with open(filename, 'r') as csvfile, tempfile:
-				reader = csv.DictReader(csvfile, fieldnames=fields)
-				writer = csv.DictWriter(tempfile, fieldnames=fields)
-				for row in reader:
-					if row['pin'] == str(self.usr_pin):
+		with open(filename, 'r') as csvfile, tempfile:
+			reader = csv.DictReader(csvfile, fieldnames=fields)
+			writer = csv.DictWriter(tempfile, fieldnames=fields)
+			for row in reader:
+				if row['pin'] == str(self.usr_pin):
+					if ch == '1':
+						print("Enter amount to be deposited...\n")
+						usr_bal = int(input())
 						print('Making deposit...')
 						temp = int(row['bal'])
 						temp += usr_bal
 						row['bal'] = str(temp)
 						row = {'pin': row['pin'], 'accHolderName': row['accHolderName'], 'bal': row['bal']}
-					writer.writerow(row)
-			shutil.move(tempfile.name, filename)
-
-		elif ch == 2:
-			print("Enter amount to be withdrawn...\n")
-			usr_bal = int(input())
-			with open(filename, 'r') as csvfile, tempfile:
-				reader = csv.DictReader(csvfile, fieldnames=fields)
-				writer = csv.DictWriter(tempfile, fieldnames=fields)
-				for row in reader:
-					if row['pin'] == str(self.usr_pin):
+					elif ch == '2':
+						print("Enter amount to be withdrawn...\n")
+						usr_bal = int(input())
 						print('Making withdrawal...')
 						temp1 = int(row['bal'])
 						temp2 = temp1
@@ -59,29 +50,23 @@ class ATM(object):
 							row['bal'] = str(temp2)
 						else:
 							row['bal'] = str(temp1)
-					row = {'pin': row['pin'], 'accHolderName': row['accHolderName'], 'bal': row['bal']}
-					writer.writerow(row)
-			shutil.move(tempfile.name, filename)
-
-		elif ch == 3:
-			with open(filename, 'r') as csvfile, tempfile:
-				reader = csv.DictReader(csvfile, fieldnames=fields)
-				for row in reader:
-					if row['pin'] == str(self.usr_pin):
+					elif ch == '3':
 						print('Current balance is...')
 						print("Rs. " + row['bal'] + " for the bank account of " + row['accHolderName'])
 						temp = int(row['bal'])
 						if temp < 0:
 							print("Balance below Rs. 0.00")
 							break
+					elif ch == '4':
+						print("Quiting...")
+						exit()
+					else:
+						print("Wrong input. Try again...")
+						self.chooser(filename, tempfile, fields)
+				writer.writerow(row)
+		shutil.move(tempfile.name, filename)
 
-		elif ch == 4:
-			print("Quiting...")
-			exit()
 
-		else:
-			print("Incorrect input. Try again...")
-			self.chooser(filename, tempfile, fields)
 
 class ATM_Interface(ATM):
 	print("Enter the PIN for your Account...\n")
